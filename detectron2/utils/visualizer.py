@@ -638,6 +638,10 @@ class Visualizer:
                     self.draw_polygon(segment.reshape(-1, 2), color, alpha=alpha)
 
             if labels is not None:
+                # skip small mask without polygon
+                if len(masks[i].polygons) == 0:
+                   continue
+                
                 # first get a box
                 if boxes is not None:
                     x0, y0, x1, y1 = boxes[i]
