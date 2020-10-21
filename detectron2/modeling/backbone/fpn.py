@@ -140,8 +140,15 @@ class FPN(Backbone):
             if top_block_in_feature is None:
                 top_block_in_feature = results[self._out_features.index(self.top_block.in_feature)]
             results.extend(self.top_block(top_block_in_feature))
+
         assert len(self._out_features) == len(results)
-        return dict(zip(self._out_features, results))
+        outputs = dict(zip(self._out_features, results))
+        
+        for f in self.in_features:
+            assert f not in outputs
+            outputs[f] = bottom_up_features[f]
+
+        return outputs
 
     def output_shape(self):
         return {
